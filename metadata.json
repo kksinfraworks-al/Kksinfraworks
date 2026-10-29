@@ -1,0 +1,6 @@
+{
+  "name": "KKSInfraWorks Construction Site Management",
+  "description": "Offline-first mobile construction site and worker management app for KKSInfraWorks (Kalindra Kumar Singh, Mairwa, Bihar). Attendance, advances, salary accounts, WhatsApp daily reports, and local IndexedDB backup.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

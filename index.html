@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KKSInfraWorks Construction Site Management</title>
+    <meta name="description" content="Offline-first mobile construction site and worker management app for KKSInfraWorks (Kalindra Kumar Singh, Mairwa, Bihar). Attendance, advances, salary accounts, WhatsApp daily reports, and local IndexedDB backup." />
+    <meta property="og:title" content="KKSInfraWorks Construction Site Management" />
+    <meta property="og:description" content="Offline-first mobile construction site and worker management app for KKSInfraWorks (Kalindra Kumar Singh, Mairwa, Bihar). Attendance, advances, salary accounts, WhatsApp daily reports, and local IndexedDB backup." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#d97706" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KKSInfra" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      // Gracefully handle Vite HMR WebSocket in AI Studio iframe/proxy environment where HMR is disabled
+      (function() {
+        // Catch and silence any residual WebSocket error logs or unhandled events
+        var origConsoleError = console.error;
+        console.error = function() {
+          var msg = (arguments && arguments[0]) ? String(arguments[0]) : '';
+          if (
+            msg.indexOf('WebSocket') !== -1 ||
+            msg.indexOf('vite:ws') !== -1 ||
+            msg.indexOf('closed without opened') !== -1 ||
+            msg.indexOf('failed to connect to websocket') !== -1 ||
+            msg.indexOf('Illegal invocation') !== -1
+          ) {
+            return;
+          }
+          origConsoleError.apply(console, arguments);
+        };
+
+        window.addEventListener('error', function(event) {
+          var msg = (event.message || '') + (event.error ? (' ' + (event.error.message || event.error.stack)) : '');
+          if (
+            msg.indexOf('WebSocket') !== -1 ||
+            msg.indexOf('closed without opened') !== -1 ||
+            msg.indexOf('Illegal invocation') !== -1 ||
+            msg.indexOf('vite') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event.reason ? (event.reason.message || event.reason.stack || String(event.reason)) : '';
+          if (
+            reason.indexOf('WebSocket') !== -1 ||
+            reason.indexOf('closed without opened') !== -1 ||
+            reason.indexOf('Illegal invocation') !== -1 ||
+            reason.indexOf('vite') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+
+        var NativeWebSocket = window.WebSocket;
+        if (typeof NativeWebSocket === 'function') {
+          class ViteHmrWebSocket extends EventTarget {
+            static CONNECTING = 0;
+            static OPEN = 1;
+            static CLOSING = 2;
+            static CLOSED = 3;
+
+            CONNECTING = 0;
+            OPEN = 1;
+            CLOSING = 2;
+            CLOSED = 3;
+
+            constructor(url, protocols) {
+              super();
+              this.url = typeof url === 'string' ? url : String(url || '');
+              this.protocol = Array.isArray(protocols) ? (protocols[0] || 'vite-hmr') : (protocols || 'vite-hmr');
+              this.readyState = 1; // WebSocket.OPEN
+              this.binaryType = 'blob';
+              this.bufferedAmount = 0;
+              this.extensions = '';
+              this.onopen = null;
+              this.onclose = null;
+              this.onerror = null;
+              this.onmessage = null;
+
+              setTimeout(() => {
+                if (this.readyState === 1) {
+                  var ev = new Event('open');
+                  try {
+                    if (typeof this.onopen === 'function') this.onopen(ev);
+                    this.dispatchEvent(ev);
+                  } catch (_) {}
+                }
+              }, 10);
+            }
+
+            send() {}
+
+            close(code, reason) {
+              this.readyState = 3;
+              var ev = new CloseEvent('close', { code: code || 1000, reason: reason || '', wasClean: true });
+              try {
+                if (typeof this.onclose === 'function') this.onclose(ev);
+                this.dispatchEvent(ev);
+              } catch (_) {}
+            }
+          }
+
+          function WebSocketProxy(url, protocols) {
+            var isViteHmr = false;
+            if (protocols === 'vite-hmr') isViteHmr = true;
+            if (Array.isArray(protocols) && protocols.indexOf('vite-hmr') !== -1) isViteHmr = true;
+            if (typeof url === 'string' && (url.indexOf('vite') !== -1 || url.indexOf('@vite') !== -1)) isViteHmr = true;
+
+            if (isViteHmr) {
+              return new ViteHmrWebSocket(url, protocols);
+            }
+            return new NativeWebSocket(url, protocols);
+          }
+
+          WebSocketProxy.prototype = NativeWebSocket.prototype;
+          WebSocketProxy.CONNECTING = 0;
+          WebSocketProxy.OPEN = 1;
+          WebSocketProxy.CLOSING = 2;
+          WebSocketProxy.CLOSED = 3;
+
+          try {
+            Object.defineProperty(WebSocketProxy, Symbol.hasInstance, {
+              value: function(instance) {
+                return instance instanceof ViteHmrWebSocket || instance instanceof NativeWebSocket;
+              }
+            });
+          } catch (_) {}
+
+          window.WebSocket = WebSocketProxy;
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-900 text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
